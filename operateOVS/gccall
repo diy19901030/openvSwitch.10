@@ -1,0 +1,8 @@
+#!/bin/sh
+#gcc all the files!
+gcc -g -fno-stack-protector cJSON.c getvnidip.c dovnidip.c getvnidmac.c getipmac.c confovs.c getbrvnid.c getencap.c initovs.c init.c -o initovs -lm
+gcc -fno-stack-protector cJSON.c updateovs.c getvnidip.c getbrvnid.c dovnidip.c getvnidmac.c init.c  -o updateovs -lm
+gcc -fno-stack-protector update_vn.c getbrvnid.c dovnidip.c getvnidip.c cJSON.c  -o update_vn -lm
+gcc -fno-stack-protector autoconf.c getbrvnid.c cJSON.c -o autoconf -lm
+gcc -fno-stack-protector cJSON.c getbrvnid.c getvnidip.c dovnidip.c update_vnidip.c -o update_vnidip -lm
+gcc -fno-stack-protector cJSON.c getvnidmac.c getvnidip.c get_mac.c -o get_mac -lm

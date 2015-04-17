@@ -1,0 +1,21 @@
+182e556b-3029-459f-92c5-2596d48a2307
+    Bridge "br1"
+        Port "br1"
+            Interface "br1"
+                type: internal
+        Port "vnet0"
+            Interface "vnet0"
+        Port vxa
+            Interface vxa
+                type: vxlan
+                options: {key="5000"}
+    Bridge "br2"
+        Port "br2"
+            Interface "br2"
+                type: internal
+    Bridge "br0"
+        Port "eth0"
+            Interface "eth0"
+        Port "br0"
+            Interface "br0"
+                type: internal

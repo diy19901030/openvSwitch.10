@@ -1,0 +1,108 @@
+#include <stdio.h> 
+#include <sys/types.h> 
+#include <sys/param.h> 
+#include <sys/ioctl.h> 
+#include <sys/socket.h> 
+#include <net/if.h> 
+#include <netinet/in.h> 
+#include <net/if_arp.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<errno.h>
+#include<string.h> 
+#include"initinfo.h"
+#ifdef SOLARIS 
+#include <sys/sockio.h> 
+#endif 
+#define MAXINTERFACES 16 
+#define MAX_LENTH 100
+
+
+/*
+    char *path_id = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnidINfo";
+    char *path_port = "/home/zzq1/openvswitch-1.10.0/operateOVS/portINfo";
+    char *path_mac = "/home/zzq1/openvswitch-1.10.0/operateOVS/macINfo";
+    char *dest_mac = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnid-mac";
+    char *dest_ip = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnid-ip";
+    char *path_tmp = "/home/zzq1/openvswitch-1.10.0/operateOVS/temp";
+    char *dest_upd = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnid-ip.update";
+
+    char *brname, *portname;
+    char buffer[MAX_LENTH],temp[50][MAX_LENTH],port1[50][5],vnid[10];
+//    char mac[100][20];
+//    int *port;
+//    char *vnic,*p;
+    
+*/
+/*
+void get_vnid_ip(char *source,char *dest);
+void get_ip(char *dest);
+void get_vnid_mac(char *p_id,char *d_mac);
+void get_mac(char *p_port,char *p_mac,char *d_mac);
+void update_vnid_ip(char *p_tmp,char *d_upd);
+void write_vnidip(char *p_tmp,char *d_upd);
+*/
+char comd1[100],comd2[100];
+void main(){
+
+    brname=(char *)malloc(sizeof(char));
+    portname=(char *)malloc(sizeof(char));
+    printf("please input the name of bridge :");
+    scanf("%s",brname);
+    printf("please input the name of port :");
+    scanf("%s",portname);
+//    printf("%s",brname);
+    system("ovs-dpctl show > portINfo");
+    sprintf(comd1,"ovs-appctl fdb/show %s > macINfo",brname);
+    system(comd1);
+    system("ovs-vsctl show > brINfo");
+    sprintf(comd2,"grep -A 3 'Port %s' brINfo | grep 'key' > vnidINfo",portname);
+    system(comd2);
+
+   
+   
+    if(access(dest_upd,0)==-1){
+    FILE *sf1 = fopen(dest_ip,"r");
+    FILE *df1 = fopen(dest_upd,"w");
+    memset(buffer,0,sizeof(buffer));
+    fgets(buffer,MAX_LENTH,sf1);
+    fputs(buffer,df1);
+    fclose(df1);
+    fclose(sf1);
+ //   printf("----");
+    }
+    
+    if(access(dest_upd_mac,0)==-1){
+    FILE *sf2 = fopen(dest_mac,"r");
+    FILE *df2 = fopen(dest_upd_mac,"w");
+    memset(buffer,0,sizeof(buffer));
+    while(fgets(buffer,MAX_LENTH,sf2)!=NULL){
+     fputs(buffer,df2);
+    }
+    
+    fclose(df2);
+    fclose(sf2);
+ //   printf("----");
+    }
+ //   fclose(pf);
+        
+
+    get_vnid_ip(path_id,dest_ip);
+
+    get_ip(dest_ip);
+
+    get_vnid_mac(path_id,dest_mac);
+
+    get_mac(path_port,path_mac,dest_mac);
+    
+    update_vnid_ip(path_tmp,dest_upd);
+
+//    update_vnid_mac(path_tmp_mac,dest_upd_mac);
+
+    free(brname);
+    free(portname);
+}

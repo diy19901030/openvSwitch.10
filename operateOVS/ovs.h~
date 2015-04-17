@@ -1,0 +1,22 @@
+char *path_brvnid = "/home/zzq/openvswitch-1.10.0/operateOVS/brvnid";
+char *path_tbrvnid = "/home/zzq/openvswitch-1.10.0/operateOVS/t_brvnid";
+char *dest_ip = "/home/zzq/openvswitch-1.10.0/operateOVS/vnidip";
+char *path_tmp_ip = "/home/zzq/openvswitch-1.10.0/operateOVS/ip_write";
+char *path_br = "/home/zzq/openvswitch-1.10.0/operateOVS/brINfo";
+char *path_brname = "/home/zzq/openvswitch-1.10.0/operateOVS/brName";
+char *path_ip = "/home/zzq/openvswitch-1.10.0/operateOVS/vnidINfo";
+char *path_port = "/home/zzq/openvswitch-1.10.0/operateOVS/portINfo";
+char *path_mac = "/home/zzq/openvswitch-1.10.0/operateOVS/macINfo";
+char *dest_mac = "/home/zzq/openvswitch-1.10.0/operateOVS/vnid-mac";
+
+
+char *path_tmp = "/home/zzq/openvswitch-1.10.0/operateOVS/vnid-mac";
+char *path_tmp_mac = "/home/zzq/openvswitch-1.10.0/operateOVS/mac_write";
+char *path_ip_mac="/home/zzq/openvswitch-1.10.0/operateOVS/ipmac";
+
+
+
+
+
+
+

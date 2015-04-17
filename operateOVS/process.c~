@@ -1,0 +1,26 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX_LENTH 1024
+
+void printfLine(char *path,char *dest);
+int main(){
+    char *path = "/home/zzq1/openvswitch-1.10.0/operateOVS/portINfo";
+    char *dest = "/home/zzq1/openvswitch-1.10.0/operateOVS/portINfo1";
+    printfLine(path,dest);
+    return 0;
+}
+
+void printfLine(char *path,char *dest){
+    char buffer[MAX_LENTH];
+    int num=1;
+    FILE *pf = fopen(path,"r");
+    FILE *df = fopen(dest,"w");
+    if(pf!=NULL&&df!=NULL) perror("file not open!");
+    while(fgets(buffer,MAX_LENTH,pf)!=NULL){
+       printf("No.%d:%s\n",num,buffer);
+       fputs(buffer,df);
+       num++;
+}
+    fclose(pf);
+
+}

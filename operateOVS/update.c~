@@ -1,0 +1,193 @@
+#include <stdio.h> 
+#include <sys/types.h> 
+#include <sys/param.h> 
+#include <sys/ioctl.h> 
+#include <sys/socket.h> 
+#include <net/if.h> 
+#include <netinet/in.h> 
+#include <net/if_arp.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<errno.h>
+#include<string.h> 
+#include<unistd.h>
+#include"cJSON.h"
+//#include"initinfo.h"
+
+#ifdef SOLARIS 
+#include <sys/sockio.h> 
+#endif 
+
+
+#define MAXINTERFACES 16 
+#define MAX_LENTH 100
+
+char *path_id = "/home/zzq/openvswitch-1.10.0/operateOVS/vnid-ip";
+char *path_tmp_ip = "/home/zzq/openvswitch-1.10.0/operateOVS/ip_write";
+char *path_tmp_mac = "/home/zzq/openvswitch-1.10.0/operateOVS/mac_write";
+char *path_tbrvnid3 = "/home/zzq/openvswitch-1.10.0/operateOVS/t_brvnid";
+char *path_brvnid3 = "/home/zzq/openvswitch-1.10.0/operateOVS/brvnid";
+
+char *pname="update";
+//char *dest_upd = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnid-ip.update";
+
+
+void update(char *p_ip,char *p_mac);
+unsigned int BKDRHash(char *str);
+
+
+void main(){
+	
+
+	int f=detect_process(pname);
+	if(f==0) {
+		printf("update已运行！\n");
+		return;
+	}
+
+
+	init_daemon();
+	system("ovs-vsctl list-br > tmp_brinfo");
+	unsigned int a,c;
+	FILE *fa=fopen(path_tmp_ip,"rb+");fseek(fa,0,SEEK_END);long len=ftell(fa);fseek(fa,0,SEEK_SET);
+	char *data=(char*)malloc(len+1);fread(data,1,len,fa);
+	a=BKDRHash(data);
+	FILE *fd=fopen("/home/zzq/openvswitch-1.10.0/operateOVS/tmp_brinfo","rb+");fseek(fd,0,SEEK_END);long len2=ftell(fd);fseek(fd,0,SEEK_SET);
+	char *data2=(char*)malloc(len2+1);fread(data2,1,len2,fd);
+	a=BKDRHash(data);
+	c=BKDRHash(data2);
+	fclose(fa);
+	fclose(fd);
+	free(data2);
+	free(data);
+	system("ovs-vsctl list-br > tmp_brinfo");
+	while(1){
+		sleep(2);
+		system("ovs-vsctl list-br > tmp_brinfo");
+		
+		FILE *fb=fopen(path_tmp_ip,"rb+");fseek(fb,0,SEEK_END);long len1=ftell(fb);fseek(fb,0,SEEK_SET);
+		char *data1=(char*)malloc(len1+1);fread(data1,1,len,fb);
+		FILE *fc=fopen("/home/zzq/openvswitch-1.10.0/operateOVS/tmp_brinfo","rb+");
+		fseek(fc,0,SEEK_END);long len2=ftell(fc);fseek(fc,0,SEEK_SET);
+		char *data3=(char*)malloc(len2+1);fread(data3,1,len,fc);
+		unsigned int b=BKDRHash(data1);
+		unsigned int d=BKDRHash(data3);
+		if(a!=b) {
+			printf("VN网络有变化！\n");
+			system("./autoconf");
+			a=b;
+		}
+/*		if(c!=d) {
+			printf("VN网络有变化！\n");
+			printf("-------\n");
+
+			get_br_vnid(path_tbrvnid3,path_brvnid3);
+			system("./autoconf");
+			c=d;;
+		}*/
+		fclose(fb);
+		fclose(fc);
+		free(data3);
+		free(data1);
+	}
+//	update(path_tmp_ip,path_tmp_mac);
+
+	return;
+
+
+}
+
+
+unsigned int BKDRHash(char *str)
+{
+    unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
+    unsigned int hash = 0;
+ 
+    while (*str)
+    {
+        hash = hash * seed + (*str++);
+    }
+ 
+    return (hash & 0x7FFFFFFF);
+}
+
+
+int detect_process(char * process_name)
+{
+	
+        FILE *ptr;
+        char buff[512];
+        char ps[128];
+        sprintf(ps,"ps -e | grep -c '%s'",process_name);
+        strcpy(buff,"ABNORMAL");
+        if((ptr=popen(ps, "r")) != NULL)
+        {
+                while (fgets(buff, 512, ptr) != NULL)
+                {
+                        if(atoi(buff)>=1)
+                        {
+                                pclose(ptr);
+                                return 1;
+                        }
+                }
+        }
+        if(strcmp(buff,"ABNORMAL")==0)  
+         return 0;        
+        pclose(ptr);
+        return 0;
+}
+
+
+
+
+/*
+void update(char *p_ip,char *p_mac){
+
+ char t_old_ip[100],t_new_ip[100];
+ char t_old_mac[100],t_new_mac[100];
+ struct stat old_ip,new_ip,old_mac,new_mac;
+// old= (struct stat *)malloc(sizeof(struct stat));
+// new= (struct stat *)malloc(sizeof(struct stat));
+ memset(t_old_ip,0,sizeof(t_old_ip));
+ memset(t_new_ip,0,sizeof(t_new_ip));
+ memset(t_old_mac,0,sizeof(t_old_mac));
+ memset(t_new_mac,0,sizeof(t_new_mac));
+ init_daemon();
+
+ stat(p_ip,&old_ip);
+ strcpy(t_old_ip,ctime(&old_ip.st_mtime));
+ stat(p_mac,&old_mac);
+ strcpy(t_old_mac,ctime(&old_mac.st_mtime));
+ 
+ while(1){
+  sleep(2);
+//  printf("hello world\n");
+  
+  stat(p_ip,&new_ip);
+  stat(p_mac,&new_mac);
+  strcpy(t_new_ip,ctime(&new_ip.st_mtime));
+ strcpy(t_new_mac,ctime(&new_mac.st_mtime));
+//  printf("old time is %s\n",t_old);
+//  printf("new time is %s\n",t_new);
+//  strcpy(t_new,t_old);
+  if(strcmp(t_new_ip,t_old_ip)!=0) {
+ //  printf("the vnid-ip has changed!\n");
+   system("./autoconf");
+   strcpy(t_old_ip,t_new_ip);
+   }    
+/*  if(strcmp(t_new_mac,t_old_mac)!=0) {
+   printf("the vnid-mac has changed!\n");
+//   printf("the old time is %s\n",ctime(&old.st_ctime));
+//   printf("the new time is %s\n",ctime(&new.st_ctime));
+ //  write_vnid_ip(p_tmp,d_upd);
+   strcpy(t_old_mac,t_new_mac);
+   }  
+  */
+/*
+}
+}*/
+

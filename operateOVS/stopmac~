@@ -1,0 +1,16 @@
+#!/bin/sh
+# stop mac
+i=2
+br=$(ifconfig -a | grep br | cut -b 1-4)
+tmp=a
+while [ "$tmp" != "" ]
+do
+	tmp=$(echo $br | cut -d ' ' -f $i)
+#	echo $tmp
+	if [ "$tmp" != "" ];then
+		ifconfig $tmp down
+#		echo configue $tmp ip $ip
+	fi
+	i=`expr $i + 1`
+done
+echo 0 > maconoff

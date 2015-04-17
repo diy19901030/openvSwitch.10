@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+
+FILE *sourcefile;
+FILE *desfile;
+char c;
+sourcefile = fopen("vnid-mac","r");
+if(!sourcefile) printf("sourcefile open error!\n");
+desfile = fopen("vnid-mac-bak","w");
+if(!desfile) printf("desfile open error!\n");
+while((c=fgetc(sourcefile))!= EOF)
+{
+        fputc(c,desfile);
+}
+
+fclose(sourcefile);
+fclose(desfile);
+
+return EXIT_SUCCESS;
+}

@@ -1,0 +1,3 @@
+#!/bin/sh
+#gcc initovs
+gcc -g cJSON.c getvnidip.c dovnidip.c getvnidmac.c getipmac.c confovs.c getbrvnid.c initovs.c  -o initovs -lm

@@ -1,0 +1,63 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define MAX_LENTH 100
+int main(){
+    char *path1 = "/home/zzq1/openvswitch-1.10.0/operateOVS/portINfo";
+    char *path2 = "/home/zzq1/openvswitch-1.10.0/operateOVS/macINfo";
+    char *dest = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnid-mac";
+    char buffer[MAX_LENTH],temp[MAX_LENTH],port1[5],mac[18];
+    int port;
+    char *vnic,*p;
+    int num=1,i=0;
+    FILE *df;
+    FILE *pf1 = fopen(path1,"r");
+    FILE *pf2 = fopen(path2,"r");
+//    
+    df= fopen(dest,"a");
+//    if(fseek(df,10L,SEEK_END)) printf("fseek error!");
+//    if(pf!=NULL&&df!=NULL) perror("file not open!");
+    while(fgets(buffer,MAX_LENTH,pf1)!=NULL){
+//       printf("No.%d:%s",num,buffer);
+//       fputs(buffer,df);
+//       num++;
+         vnic=strstr(buffer,"vnet0");
+       if(vnic)  {
+//              printf("%s",buffer);
+              while(buffer[i]!='\0'){
+               if(isdigit(buffer[i])) temp[i]=buffer[i];
+               else temp[i]=' ';
+               ++i;}       
+             temp[i]='\0';
+//             printf("%s\n",temp);
+             sscanf(temp,"%d",&port);
+             printf("%d\n",port);
+}
+   
+}//find the port of vm's vnic
+//fclose(pf);
+     memset(buffer,0,sizeof(buffer));
+     memset(temp,0,sizeof(temp));
+     while(fgets(buffer,MAX_LENTH,pf2)!=NULL){
+            sprintf(port1,"%4d",port);
+//            printf("the length of port1 %d\n",sizeof(port1));
+            p=strstr(buffer,port1);
+          int k=0;
+          if(p)  for(int j=13;j<31;j++) {
+          
+          mac[k]=buffer[j];
+           k++;}
+          mac[k]='\0'; 
+ //         sscanf(mac1,"%7s",mac);
+          printf("%s\n",mac);
+}
+
+fwrite(mac,sizeof(mac),sizeof(char),df);
+//fputs(mac,df);
+fclose(df);
+return 1;
+
+
+}
+
+

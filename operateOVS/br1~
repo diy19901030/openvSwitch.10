@@ -1,0 +1,26 @@
+    Bridge "br1"
+        Port "vnet0"
+            Interface "vnet0"
+        Port "br1"
+            Interface "br1"
+                type: internal
+        Port "vnet1"
+            Interface "vnet1"
+        Port vxc
+            Interface vxc
+                type: vxlan
+                options: {key="5000", remote_ip="10.108.100.225"}
+        Port vxf
+            Interface vxf
+                type: vxlan
+                options: {key="5000", remote_ip="10.108.101.169"}
+        Port vxa
+            Interface vxa
+                type: vxlan
+                options: {key="5000"}
+        Port vxe
+            Interface vxe
+                type: vxlan
+                options: {key="5000", remote_ip="10.108.109.181"}
+
+    Bridge "br2"

@@ -1,0 +1,6 @@
+//char *path_br = "/home/zzq/openvswitch-1.10.0/operateOVS/brINfo";
+//char *path_brname = "/home/zzq/openvswitch-1.10.0/operateOVS/brName";
+//char *path_tbrvnid = "/home/zzq/openvswitch-1.10.0/operateOVS/t_brvnid";
+//char *path_brvnid = "/home/zzq/openvswitch-1.10.0/operateOVS/brvnid";
+// char *path_tmp_ip = "/home/zzq/openvswitch-1.10.0/operateOVS/ip_write";
+//char *dest_ip = "/home/zzq/openvswitch-1.10.0/operateOVS/vnidip";

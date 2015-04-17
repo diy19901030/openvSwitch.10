@@ -1,0 +1,3 @@
+#!/bin/sh
+path=/home/zzq/openvswitch-1.10.0/operateOVS
+sed -i 's/$path/`pwd`/g' initovs.h

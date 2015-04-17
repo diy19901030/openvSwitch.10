@@ -1,0 +1,12 @@
+system@ovs-system:
+	lookups: hit:2049 missed:1415 lost:0
+	flows: 0
+	port 0: ovs-system (internal)
+	port 1: br0 (internal)
+	port 2: eth0
+	port 3: br2 (internal)
+	port 4: vxlan_sys_4789 (vxlan: df_default=false, ttl=0)
+	port 5: br1 (internal)
+	port 6: vnet0
+ port  VLAN  MAC                Age
+    6     0  08:00:27:61:80:a1   29

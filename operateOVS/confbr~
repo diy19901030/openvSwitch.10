@@ -1,0 +1,21 @@
+#!/bin/sh
+# configure bridge
+i=2
+ip1=10
+dot=.
+ip2=1.2.10/24
+br=$(ifconfig -a | grep br | cut -b 1-4)
+tmp=a
+while [ "$tmp" != "" ]
+do
+	tmp=$(echo $br | cut -d ' ' -f $i)
+#	echo $tmp
+	if [ "$tmp" != "" ];then
+		ip=${ip1}${dot}${ip2}
+		ifconfig $tmp $ip up
+#		echo configue $tmp ip $ip
+		ip1=`expr $ip1 + 1`
+	fi
+	i=`expr $i + 1`
+done
+echo 1 > maconoff

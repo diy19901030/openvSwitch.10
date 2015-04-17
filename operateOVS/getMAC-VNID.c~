@@ -1,0 +1,13 @@
+#include<stdlib.h>
+#include<sys/types.h>
+#include<unistd.h>
+#include<fcntl.h>
+int fd;
+main()
+{
+   system("ovs-dpctl show > portINfo");
+//   fd=open("portINfo",O_RDWR | O_CREAT);
+//   lseek(fd,0,SEEK_END);
+   system("ovs-appctl fdb/show br1 > macINfo");
+//   close(fd);
+}

@@ -1,0 +1,160 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<fcntl.h>
+//#include"initinfo.h"
+
+#define MAX_LENTH 100
+
+    char *path_ip = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnidINfo";
+    char *path_port = "/home/zzq1/openvswitch-1.10.0/operateOVS/portINfo";
+    char *path_mac = "/home/zzq1/openvswitch-1.10.0/operateOVS/macINfo";
+    char *dest_mac = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnid-mac";
+
+    char buffer[MAX_LENTH],temp[50][MAX_LENTH],port1[50][5],vnid[10];
+    char mac[100][20];
+    int *port;
+    char *vnic,*p;
+    int portnum=1;
+
+void get_vnid_mac(char *p_ip,char *d_mac);
+void get_mac(char *p_port,char *p_mac,char *d_mac);
+
+void main(){
+
+
+    brname=(char *)malloc(sizeof(char));
+    portname=(char *)malloc(sizeof(char));
+    printf("please input the name of bridge :");
+    scanf("%s",brname);
+//    printf("please input the name of port :");
+//    scanf("%s",portname);
+//    printf("%s",brname);
+    system("ovs-dpctl show > portINfo");
+    sprintf(comd1,"ovs-appctl fdb/show %s > macINfo",brname);
+    system(comd1);
+
+
+//vnic=(char *)malloc(sizeof(char));
+//port=(int *)malloc(sizeof(int));
+//p=(char *)malloc(sizeof(char));
+get_vnid_mac(path_ip,dest_mac);
+
+get_mac(path_port,path_mac,dest_mac);
+}
+
+void get_vnid_mac(char *p_ip, char *d_mac){
+
+    int k=0;
+    FILE *pf0 = fopen(p_ip,"r");
+    FILE *df = fopen(d_mac,"w");
+    if(pf0==NULL&&df==NULL) printf("file not open");
+    memset(vnid,0,sizeof(vnid));
+    while(fgets(buffer,MAX_LENTH,pf0)!=NULL){
+          int i=31,j=0;
+          do{
+                vnid[k++]=buffer[i];
+                i++;
+
+                }while(buffer[i]>='0'&&buffer[i]<='9');           
+ 
+}//while
+    vnid[k]='-';
+fwrite(vnid,strlen(vnid),sizeof(char),df);
+     fclose(pf0);
+     fclose(df);
+
+}
+
+void get_mac(char *p_port,char *p_mac,char *d_mac){
+FILE *pf1 = fopen(p_port,"r");
+    vnic=(char *)malloc(sizeof(char));
+    port=(int *)malloc(sizeof(int));
+    int n=0;
+     FILE *df= fopen(d_mac,"a+");
+    while(fgets(buffer,MAX_LENTH,pf1)!=NULL){
+         int i=0;
+         vnic=NULL;
+         vnic=strstr(buffer,"vnet");
+       if(vnic)  {
+              while(buffer[i]!='\0'){
+               if(isdigit(buffer[i])) temp[n][i]=buffer[i];
+               else temp[n][i]=' ';
+               ++i;}       
+             temp[n][i]='\0';
+             sscanf(temp[n],"%d",&port[n]);
+
+             n++;
+}
+
+}//find the port of vm's vnic
+
+
+     
+     int q;
+     for(q=0;q<n;q++){
+         sprintf(port1[q],"%4d",port[q]);
+//     int fd3=open("tt",O_RDWR | O_CREAT);
+//     write(fd3,port1[q]); 
+     printf("port1[%d] is %s\n",q,port1[q]);
+     memset(buffer,0,sizeof(buffer));
+     FILE *pf2 = fopen(p_mac,"r");
+     while(fgets(buffer,MAX_LENTH,pf2)!=NULL){
+         
+         if(q>n) {printf("port number error!\n");continue;}
+
+          p=NULL;
+          p=strstr(buffer,port1[q]);
+          printf("buffer is %s\n",buffer);
+          int k=0,a=0;
+          if(p) { 
+          int j;
+          for( j=13;j<31;j++) {
+          mac[q][k]=buffer[j];
+ //         printf("%c",mac[q][k]);
+           k++;}
+  //        
+          mac[q][k-1]='\n';
+ //         printf("%d---",mac[q][k-1]);
+//          printf("mac[%d] is %s\n",q,mac[q]);
+          printf("MAC is %s",mac[q]);
+          break;
+        
+}    
+
+          
+          
+}//while
+        fclose(pf2);
+}//for
+//if(p==NULL) {printf("MAC is empty!\n"); }
+ printf("mac address is :\n");
+ printf("n is :%d\n",n);
+printf("the length of mac[1] is %d\n",strlen(mac[1]));
+ int h;
+ if(n==1) fwrite(mac[n-1],strlen(mac[n-1]),sizeof(char),df);
+ else {
+ fwrite(mac[0],strlen(mac[0]),sizeof(char),df);
+ for( h=1;h<n;h++) {
+     int w=0;
+//     if(strlen(mac[h+1])==0) 
+ //    {printf("%s\n",mac[h]);
+ //    fwrite(mac[h],strlen(mac[h]),sizeof(char),df);}
+     printf("111\n");
+     w=strcmp(mac[h],mac[h-1]);
+     if(w!=0){printf("---%s\n",mac[h]);
+     fwrite(vnid,strlen(vnid),sizeof(char),df);
+     fwrite(mac[h],strlen(mac[h]),sizeof(char),df);
+     }
+
+// printf("%s\n",mac[h]);
+    }
+fclose(df);
+//fputs(mac,df);
+}
+    free(vnic);
+    free(port);
+}
+
+
+

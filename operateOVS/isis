@@ -1,0 +1,2 @@
+#!/bin/sh
+(echo "foo";echo "en";echo "foo";echo "configure terminal";echo "interface br17";echo "isis circuit-type level-1";echo "ip router isis DEAD";echo "isis hello-interval 10";)|telnet localhost 2608

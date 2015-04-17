@@ -1,0 +1,77 @@
+
+
+#include "ofproto/ofproto-provider.h"
+
+#include <errno.h>
+
+#include "autopath.h"
+#include "bond.h"
+#include "bundle.h"
+#include "byte-order.h"
+#include "connmgr.h"
+#include "coverage.h"
+#include "cfm.h"
+#include "dpif.h"
+#include "dynamic-string.h"
+#include "fail-open.h"
+#include "hmapx.h"
+#include "lacp.h"
+#include "learn.h"
+#include "mac-learning.h"
+#include "meta-flow.h"
+#include "multipath.h"
+#include "netdev-vport.h"
+#include "netdev.h"
+#include "netlink.h"
+#include "nx-match.h"
+#include "odp-util.h"
+#include "ofp-util.h"
+#include "ofpbuf.h"
+#include "ofp-actions.h"
+#include "ofp-parse.h"
+#include "ofp-print.h"
+#include "ofproto-dpif-governor.h"
+#include "ofproto-dpif-sflow.h"
+#include "poll-loop.h"
+#include "simap.h"
+#include "smap.h"
+#include "timer.h"
+#include "tunnel.h"
+#include "unaligned.h"
+#include "unixctl.h"
+#include "vlan-bitmap.h"
+#include "vlog.h"
+
+
+static void
+ofproto_unixctl_fdb_show(struct unixctl_conn *conn, int argc OVS_UNUSED,
+                         const char *argv[], void *aux OVS_UNUSED)
+{
+    struct ds ds = DS_EMPTY_INITIALIZER;
+    const struct ofproto_dpif *ofproto;
+    const struct mac_entry *e;
+
+    ofproto = ofproto_dpif_lookup(argv[1]);
+    if (!ofproto) {
+        unixctl_command_reply_error(conn, "no such bridge");
+        return;
+    }
+
+    ds_put_cstr(&ds, " port  VLAN  MAC                Age\n");
+    LIST_FOR_EACH (e, lru_node, &ofproto->ml->lrus) {
+        struct ofbundle *bundle = e->port.p;
+        ds_put_format(&ds, "%5d  %4d  "ETH_ADDR_FMT"  %3d\n",
+                      ofbundle_get_a_port(bundle)->odp_port,
+                      e->vlan, ETH_ADDR_ARGS(e->mac),
+                      mac_entry_age(ofproto->ml, e));
+    }
+    unixctl_command_reply(conn, ds_cstr(&ds));
+    ds_destroy(&ds);
+}
+
+void main(){
+
+ofproto_unixctl_fdb_show
+}
+
+

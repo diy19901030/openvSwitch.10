@@ -1,0 +1,6 @@
+#!/bin/sh
+touch "kill_isis"
+sleep 5
+rm -if "kill_isis"
+ps -e | grep isisd | cut -c 1-5 | xargs kill -9
+ps -e | grep zebra | cut -c 1-5 | xargs kill -9

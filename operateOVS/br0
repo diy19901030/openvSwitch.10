@@ -1,0 +1,9 @@
+    Bridge "br0"
+        Port "br0"
+            Interface "br0"
+                type: internal
+        Port "eth0"
+            Interface "eth0"
+        Port "eth1"
+            Interface "eth1"
+    Bridge "br18"

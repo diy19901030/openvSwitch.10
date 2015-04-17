@@ -1,0 +1,18 @@
+init : initinfo.o init.o \
+	 get_vnid-ip.o get_vnid-mac.o update_vnid-ip.o update_vnid-mac.o
+	gcc -o init initinfo.o init.o \
+	 get_vnid-ip.o get_vnid-mac.o update_vnid-ip.o update_vnid-mac.o
+
+initinfo : initinfo.c init.c initinfo.h
+	gcc -c initinfo.c init.c
+get_vnid-ip.o : get_vnid-ip.c
+	gcc -c get_vnid-ip.c
+get_vnid-mac.o : get_vnid-mac.c
+	gcc -c get_vnid-mac.c
+update_vnid-ip.o : update_vnid-ip.c
+	gcc -c update_vnid-ip.c
+update_vnid_mac.o : update_vnid-mac.c
+	gcc -c update_vnid-mac.c
+clean :
+	rm init initinfo.o init.o \
+	 get_vnid-ip.o get_vnid-mac.o update_vnid-ip.o update_vnid-mac.o

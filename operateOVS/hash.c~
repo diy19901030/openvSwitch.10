@@ -1,0 +1,34 @@
+#include<stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+char *path_tmp_ip = "/home/zzq/openvswitch-1.10.0/operateOVS/ip_write";
+unsigned int BKDRHash(char *str);
+
+void main(){
+
+
+	FILE *fa=fopen(path_tmp_ip,"rb+");fseek(fa,0,SEEK_END);long len=ftell(fa);fseek(fa,0,SEEK_SET);
+	char *data=(char*)malloc(len+1);fread(data,1,len,fa);
+	unsigned int a;
+	a=BKDRHash(data);
+	printf("after hash is %d\n",a);
+
+
+}
+// BKDR Hash Function
+unsigned int BKDRHash(char *str)
+{
+    unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
+    unsigned int hash = 0;
+ 
+    while (*str)
+    {
+        hash = hash * seed + (*str++);
+    }
+ 
+    return (hash & 0x7FFFFFFF);
+}
+
+

@@ -1,0 +1,41 @@
+1cf162cb-c04d-494c-a63c-edbb31018880
+    Bridge "br17"
+        Port "br17"
+            Interface "br17"
+                type: internal
+        Port "211"
+            Interface "211"
+                type: vxlan
+                options: {key="17", remote_ip="192.168.1.12"}
+        Port "17"
+            Interface "17"
+                type: vxlan
+                options: {key="17"}
+    Bridge "br0"
+        Port "br0"
+            Interface "br0"
+                type: internal
+        Port "eth0"
+            Interface "eth0"
+        Port "eth1"
+            Interface "eth1"
+    Bridge "br18"
+        Port "18"
+            Interface "18"
+                type: vxlan
+                options: {key="18"}
+        Port "br18"
+            Interface "br18"
+                type: internal
+    Bridge "br16"
+        Port "br16"
+            Interface "br16"
+                type: internal
+        Port "16"
+            Interface "16"
+                type: vxlan
+                options: {key="16"}
+        Port "885"
+            Interface "885"
+                type: vxlan
+                options: {key="16", remote_ip="192.168.1.12"}

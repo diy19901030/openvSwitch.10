@@ -1,0 +1,13 @@
+    Bridge "br17"
+        Port "br17"
+            Interface "br17"
+                type: internal
+        Port "211"
+            Interface "211"
+                type: vxlan
+                options: {key="17", remote_ip="192.168.1.12"}
+        Port "17"
+            Interface "17"
+                type: vxlan
+                options: {key="17"}
+    Bridge "br0"

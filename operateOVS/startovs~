@@ -1,0 +1,25 @@
+#!/bin/sh
+#start OVS
+insmod ../datapath/linux/openvswitch.ko
+ip tuntap add mode tap vnet0
+ip link set vnet0 up
+ip tuntap add mode tap vnet1
+ip link set vnet1 up
+ovsdb-server /usr/local/etc/openvswitch/conf.db \
+--remote=punix:/usr/local/var/run/openvswitch/db.sock \
+--remote=db:Open_vSwitch,manager_options \
+--private-key=db:SSL,private_key \
+--certificate=db:SSL,certificate \
+--bootstrap-ca-cert=db:SSL,ca_cert --pidfile --detach --log-file
+ovs-vsctl --no-wait init
+ovs-vswitchd --pidfile --detach --log-file
+sleep 1
+ifconfig br0 192.168.1.10/24 up
+sleep 1
+ifconfig br5000 192.168.1.10/24 up
+sleep 1
+#ifconfig br6000 192.168.1.10/24 up
+#ip1=$(ifconfig eth0 | grep "inet " | cut -c 23-38 | sed 's/ \+$//')
+#tmp=/22
+#ip=${ip1}${tmp}
+#ifconfig br0 $ip up

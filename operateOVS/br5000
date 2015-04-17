@@ -1,0 +1,11 @@
+    Bridge "br5000"
+        Port "765"
+            Interface "765"
+                type: vxlan
+                options: {key="5000", remote_ip="192.168.1.10"}
+        Port "br5000"
+            Interface "br5000"
+                type: internal
+        Port "vnet0"
+            Interface "vnet0"
+    Bridge "br0"

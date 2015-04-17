@@ -1,0 +1,4 @@
+#!/bin/bash
+ovs-vsctl add-br br3
+ovs-vsctl add-port br3 vxg
+ovs-vsctl set inteface vxg type=vxlan options:key=5000

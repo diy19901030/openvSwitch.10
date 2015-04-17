@@ -1,0 +1,12 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+void main(){
+    char brname;
+    printf("please input the name of bridge :");
+    scanf("%s",brname);
+    printf("%s",brname);
+//    system("ovs-dpctl show > portINfo");
+
+
+}

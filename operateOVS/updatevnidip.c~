@@ -1,0 +1,108 @@
+/*
+update vnid-ip.If the file of vnid-ip.update exits,then update;if the file of vnid-ip.update doesn't exits, then create it and copy file vnid-ip into it,finally,update it. 
+
+*/
+#include <stdio.h> 
+#include <sys/types.h> 
+#include <sys/param.h> 
+#include <sys/ioctl.h> 
+#include <sys/socket.h> 
+#include <net/if.h> 
+#include <netinet/in.h> 
+#include <net/if_arp.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<errno.h>
+#include<string.h> 
+#include<unistd.h>
+//#include"initinfo.h"
+
+#ifdef SOLARIS 
+#include <sys/sockio.h> 
+#endif 
+
+
+#define MAXINTERFACES 16 
+#define MAX_LENTH 100
+/*
+char *path_id = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnid-ip";
+char *path_tmp = "/home/zzq1/openvswitch-1.10.0/operateOVS/temp_ip";
+char *dest_upd = "/home/zzq1/openvswitch-1.10.0/operateOVS/update_vnidip";
+*/
+void update_vnid_ip(char *p_tmp,char *d_upd);
+void write_vnidip(char *p_tmp,char *d_upd);
+
+char update[MAX_LENTH],buffer[MAX_LENTH];
+
+/*
+void main(){
+
+   FILE *sf = fopen(path_id,"r");
+   
+    if(access(dest_upd,0)==-1){
+    FILE *df = fopen(dest_upd,"w");
+    memset(buffer,0,sizeof(buffer));
+    fgets(buffer,MAX_LENTH,sf);
+    fputs(buffer,df);
+    fclose(df);
+ //   printf("----");
+    }
+    update_vnid_ip(path_tmp);
+    
+ //   fclose(pf);
+    fclose(sf);
+//    
+}
+*/
+void update_vnid_ip(char *p_tmp,char *d_upd){
+
+ char t_old[100],t_new[100];
+ struct stat old,new;
+// old= (struct stat *)malloc(sizeof(struct stat));
+// new= (struct stat *)malloc(sizeof(struct stat));
+ memset(t_old,0,sizeof(t_old));
+ memset(t_new,0,sizeof(t_new));
+ init_daemon();
+
+ stat(p_tmp,&old);
+ strcpy(t_old,ctime(&old.st_mtime));
+ 
+ while(1){
+  sleep(2);
+//  printf("hello world\n");
+  
+  stat(p_tmp,&new);
+  strcpy(t_new,ctime(&new.st_mtime));
+//  printf("old time is %s\n",t_old);
+//  printf("new time is %s\n",t_new);
+//  strcpy(t_new,t_old);
+  if(strcmp(t_new,t_old)!=0) {
+   printf("the file has changed!\n");
+   printf("the old time is %s\n",ctime(&old.st_ctime));
+   printf("the new time is %s\n",ctime(&new.st_ctime));
+   write_vnid_ip(p_tmp,d_upd);
+   strcpy(t_old,t_new);
+   }    
+  
+}
+
+}
+
+void write_vnid_ip(char *p_tmp,char *d_upd){
+    
+	if(access(p_tmp,0)==-1) {FILE *fb=fopen(p_tmp,"w");fclose(fb);}
+	FILE *f=fopen(p_tmp,"rb");fseek(f,0,SEEK_END);long len=ftell(f);fseek(f,0,SEEK_SET);
+	char *data=(char*)malloc(len+1);fread(data,1,len,f);
+	char *out;cJSON *json,*j,*j_get=NULL;
+	char *vnid,*ip,*t_ip,*t_vnid;
+	int flag;
+	json=cJSON_Parse(data);
+	if (!json) {printf("Error before: [%s]\n",cJSON_GetErrorPtr());}
+
+}
+
+

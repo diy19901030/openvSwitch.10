@@ -1,0 +1,14 @@
+    Bridge "br16"
+        Port "br16"
+            Interface "br16"
+                type: internal
+        Port "16"
+            Interface "16"
+                type: vxlan
+                options: {key="16"}
+        Port "vnet16"
+            Interface "vnet16"
+        Port "885"
+            Interface "885"
+                type: vxlan
+                options: {key="16", remote_ip="192.168.1.12"}

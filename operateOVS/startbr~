@@ -1,0 +1,4 @@
+#!/bin/sh
+# configure bridge
+br=`ifconfig -a | grep br | cut -b 1-4`
+echo $br

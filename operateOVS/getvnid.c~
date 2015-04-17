@@ -1,0 +1,31 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define MAX_LENTH 100
+void main(){
+    char *path = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnidINfo";
+    char *dest = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnid-ip";
+    char buffer[MAX_LENTH],vnid[10];
+    int k=0;
+    FILE *pf = fopen(path,"r");
+    FILE *df = fopen(dest,"w");
+    if(pf==NULL&&df==NULL) printf("file not open");
+    memset(vnid,0,sizeof(vnid));
+    while(fgets(buffer,MAX_LENTH,pf)!=NULL){
+//          for(int i=0;i<sizeof(buffer);i++){
+          int i=31,j=0;
+          do{
+                vnid[k++]=buffer[i];
+                i++;
+
+                }while(buffer[i]>='0'&&buffer[i]<='9');           
+ 
+ //       printf("%c",buffer[31]);
+//}
+}//while
+    vnid[k]='-';
+    printf("%d",k);
+fwrite(vnid,sizeof(vnid),sizeof(char),df);
+     fclose(pf);
+     fclose(df);
+}

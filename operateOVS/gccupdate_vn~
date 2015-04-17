@@ -1,0 +1,3 @@
+#!/bin/sh
+#gcc update_vn
+gcc update_vn.c getbrvnid.c dovnidip.c getvnidip.c cJSON.c ovs.h -o update_vn -lm

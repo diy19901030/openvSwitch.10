@@ -1,0 +1,156 @@
+#include <stdio.h> 
+#include <sys/types.h> 
+#include <sys/param.h> 
+#include <sys/ioctl.h> 
+#include <sys/socket.h> 
+#include <net/if.h> 
+#include <netinet/in.h> 
+#include <net/if_arp.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<errno.h>
+#include<string.h> 
+//#include"initinfo.h"
+
+#ifdef SOLARIS 
+#include <sys/sockio.h> 
+#endif 
+#define MAXINTERFACES 16 
+#define MAX_LENTH 100
+/*
+char *path_id = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnidINfo";
+char *dest_ip = "/home/zzq1/openvswitch-1.10.0/operateOVS/vnid-ip";
+char *brname, *portname;
+char comd[100];
+
+void get_vnid_ip(char *source,char *dest);
+void get_ip(char *dest);
+
+main (argc, argv) 
+//register int argc; 
+//register char *argv[]; 
+{
+
+get_vnid_ip(path_id,dest_ip);
+
+get_ip(dest_ip);
+}
+
+*/
+//get vnid
+void get_vnid_ip(char *source,char *dest){
+    char buffer[MAX_LENTH],vnid[10];
+    int k=0;
+    FILE *pf = fopen(source,"r");
+    FILE *df = fopen(dest,"w");
+    if(pf==NULL&&df==NULL) printf("file not open");
+    memset(vnid,0,sizeof(vnid));
+    while(fgets(buffer,MAX_LENTH,pf)!=NULL){
+//          for(int i=0;i<sizeof(buffer);i++){
+          int i=31,j=0;
+          do{
+                vnid[k++]=buffer[i];
+                i++;
+
+                }while(buffer[i]>='0'&&buffer[i]<='9');           
+ 
+ //       printf("%c",buffer[31]);
+//}
+}//while
+    vnid[k]='-';
+//    printf("%d",k);
+fwrite(vnid,strlen(vnid),sizeof(char),df);
+     fclose(pf);
+     fclose(df);
+}
+
+//get NVE's IP
+
+void get_ip(char *dest){
+
+register int fd, intrface, retn = 0; 
+int fd1;
+struct ifreq buf[MAXINTERFACES];
+char *bufip; 
+struct arpreq arp; 
+struct ifconf ifc; 
+if ((fd = socket (AF_INET, SOCK_DGRAM, 0)) >= 0) 
+{ 
+ifc.ifc_len = sizeof(buf); 
+ifc.ifc_buf = (caddr_t) buf; 
+if (!ioctl (fd, SIOCGIFCONF, (char *) &ifc)) 
+{ 
+//获取接口信息
+intrface = ifc.ifc_len / sizeof (struct ifreq); 
+printf("interface num is intrface=%d\n\n\n",intrface); 
+//根据借口信息循环获取设备IP和MAC地址
+//while (intrface-- > 0) 
+//{ 
+//获取设备名称
+intrface=1;
+printf ("net device %s\n", buf[intrface].ifr_name); 
+
+//判断网卡类型 
+if (!(ioctl (fd, SIOCGIFFLAGS, (char *) &buf[intrface]))) 
+{ 
+if (buf[intrface].ifr_flags & IFF_PROMISC) 
+{ 
+puts ("the interface is PROMISC"); 
+retn++; 
+} 
+} 
+else 
+{ 
+char str[256]; 
+sprintf (str, "cpm: ioctl device %s", buf[intrface].ifr_name); 
+perror (str); 
+} 
+//判断网卡状态 
+if (buf[intrface].ifr_flags & IFF_UP) 
+{ 
+puts("the interface status is UP"); 
+} 
+else 
+{ 
+puts("the interface status is DOWN"); 
+} 
+
+
+fd1=open(dest,O_RDWR|O_CREAT);
+lseek(fd1,0,SEEK_END);
+//获取当前网卡的IP地址 
+if (!(ioctl (fd, SIOCGIFADDR, (char *) &buf[intrface]))) 
+{ 
+puts ("IP address is:"); 
+puts(inet_ntoa(((struct sockaddr_in*)(&buf[intrface].ifr_addr))->sin_addr)); 
+
+bufip=(char *)malloc(sizeof(char));
+strcpy(bufip,inet_ntoa(((struct sockaddr_in*)(&buf[intrface].ifr_addr))->sin_addr));
+
+write(fd1,bufip,strlen(bufip));
+write(fd1,"\n",strlen("\n"));
+
+puts(""); 
+
+} 
+else 
+{ 
+char str[256]; 
+sprintf (str, "cpm: ioctl device %s", buf[intrface].ifr_name); 
+perror (str); 
+} 
+
+close (fd); 
+close (fd1);
+
+}
+}
+}
+
+
+
+

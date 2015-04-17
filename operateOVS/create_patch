@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#create patch port
+
+ovs-vsctl add-port br0 patch-to-p16
+ovs-vsctl set interface patch-to-p16 type=patch options:peer=p16-to-p0
+
+sleep 1
+ovs-vsctl add-port br16  p16-to-p0
+ovs-vsctl set interface p16-to-p0 type=patch options:peer=patch-to-p16

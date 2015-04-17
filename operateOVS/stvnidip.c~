@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include "cJSON.h"
+
+char *path_tmp_ip = "/home/zzq/openvswitch-1.10.0/operateOVS/temp_ip";
+char *path_id = "/home/zzq/openvswitch-1.10.0/operateOVS/vnidINfo";
+void dofile(char *filename);
+//void doit(char *text);
+
+void main(){
+	dofile(path_tmp_ip);
+}
+
+
+/* Read a file, parse, render back, etc. */
+void dofile(char *filename)
+{
+	if(access(filename,0)==-1) {FILE *fb=fopen(filename,"w");fclose(fb);}
+	FILE *f=fopen(filename,"rb");fseek(f,0,SEEK_END);long len=ftell(f);fseek(f,0,SEEK_SET);
+	char *data=(char*)malloc(len+1);fread(data,1,len,f);
+	char *out;cJSON *json,*j,*j_get=NULL;
+	char *vnid,*ip,*t_ip,*t_vnid;
+	int flag;
+	json=cJSON_Parse(data);
+	if (!json) {printf("Error before: [%s]\n",cJSON_GetErrorPtr());}
+	else
+	{
+		out=(char *)malloc(sizeof(char));
+		vnid=(char *)malloc(sizeof(char));
+		ip=(char *)malloc(sizeof(char));
+		t_ip=(char *)malloc(sizeof(char));
+		t_vnid=(char *)malloc(sizeof(char));
+		vnid=get_vnid_ip(path_id);
+//		strcpy(t_vnid,vnid);
+		printf("vnid is %s\n",vnid);
+//		ip=get_ip();
+//		strcpy(t_ip,ip);
+//		printf("---ip is %s\n",t_ip);
+		int i,arrySize=0;
+//		cJSON *new=cJSON_CreateObject();
+//		cJSON *J_ip=cJSON_CreateArray();
+		cJSON *addip=cJSON_CreateString(t_ip);
+		printf("the length of ip is %d\n",strlen(t_ip));
+//		printf("the length of addip is %d\n",sizeof(addip));
+//		printf("addip  is %s\n",cJSON_Print(addip));
+		
+//		cJSON_AddItemToArray(J_ip, addip);
+//		cJSON *addip=cJSON_CreateString("192.168.1.12");
+		j=cJSON_GetObjectItem(json,"vnidip");
+		printf("old j is %s\n",cJSON_Print(j));
+//		cJSON_AddItemToObject(j,vnid,new);
+//		cJSON_AddItemToObject(j,vnid,J_ip);
+//		printf("ip type is %d\n",J_ip->type);
+//		printf("new j is %s\n",cJSON_Print(j));
+		cJSON *taskArry=cJSON_GetObjectItem(j,vnid);
+		arrySize=cJSON_GetArraySize(taskArry);
+		printf("taskArry size is %d\n",arrySize);
+		
+		int flag=0;
+		for(i=0;i<arrySize;i++){
+			j_get=cJSON_GetArrayItem(taskArry,i);
+			//printf("the ip is %s\n",j_get->valuestring);
+			if(!strcmp(j_get->valuestring,addip->valuestring)) flag=1;
+		}
+		if(flag) return;
+		
+		cJSON_AddItemToArray(taskArry, addip);
+		
+//		printf("taskArry type is %d\n",taskArry->type);
+//		if(!taskArry){printf("no such object!\n");return;}
+		out=cJSON_Print(json);
+		printf("the length of out is %d\n",strlen(out));
+		printf("the update json is %s\n",out);
+		f=fopen(filename,"w+");
+		fwrite(out,strlen(out),sizeof(char),f);
+		fclose(f);
+//		cJSON_Delete(addip);
+//		free(out);
+//		free(vnid);
+//		free(addip);
+}
+		cJSON_Delete(json);
+		
+
+//	fclose(f);
+//	doit(data);
+//	free(data);
+}
+
+
