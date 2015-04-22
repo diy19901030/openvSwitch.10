@@ -1,13 +1,13 @@
     Bridge "br18"
-        Port "873"
-            Interface "873"
+        Port "182"
+            Interface "182"
                 type: vxlan
                 options: {key="18", remote_ip="192.168.1.12"}
+        Port "br18"
+            Interface "br18"
+                type: internal
         Port "18"
             Interface "18"
                 type: vxlan
                 options: {key="18"}
-        Port "br18"
-            Interface "br18"
-                type: internal
-    Bridge "br16"
+    Bridge "br5000"

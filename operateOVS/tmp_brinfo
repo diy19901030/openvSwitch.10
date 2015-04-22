@@ -1,16 +1,26 @@
 1cf162cb-c04d-494c-a63c-edbb31018880
-    Bridge "br17"
-        Port "br17"
-            Interface "br17"
+    Bridge "br18"
+        Port "182"
+            Interface "182"
+                type: vxlan
+                options: {key="18", remote_ip="192.168.1.12"}
+        Port "br18"
+            Interface "br18"
                 type: internal
-        Port "211"
-            Interface "211"
+        Port "18"
+            Interface "18"
                 type: vxlan
-                options: {key="17", remote_ip="192.168.1.12"}
-        Port "17"
-            Interface "17"
+                options: {key="18"}
+    Bridge "br5000"
+        Port "br5000"
+            Interface "br5000"
+                type: internal
+        Port "vnet0"
+            Interface "vnet0"
+        Port "985"
+            Interface "985"
                 type: vxlan
-                options: {key="17"}
+                options: {key="5000", remote_ip="192.168.1.12"}
     Bridge "br0"
         Port "br0"
             Interface "br0"
@@ -19,29 +29,27 @@
             Interface "eth0"
         Port "eth1"
             Interface "eth1"
-    Bridge "br18"
-        Port "873"
-            Interface "873"
-                type: vxlan
-                options: {key="18", remote_ip="192.168.1.12"}
-        Port "18"
-            Interface "18"
-                type: vxlan
-                options: {key="18"}
-        Port "br18"
-            Interface "br18"
-                type: internal
     Bridge "br16"
         Port "br16"
             Interface "br16"
                 type: internal
+        Port "255"
+            Interface "255"
+                type: vxlan
+                options: {key="16", remote_ip="192.168.1.12"}
         Port "16"
             Interface "16"
                 type: vxlan
                 options: {key="16"}
-        Port "vnet16"
-            Interface "vnet16"
-        Port "885"
-            Interface "885"
+    Bridge "br17"
+        Port "br17"
+            Interface "br17"
+                type: internal
+        Port "857"
+            Interface "857"
                 type: vxlan
-                options: {key="16", remote_ip="192.168.1.12"}
+                options: {key="17", remote_ip="192.168.1.12"}
+        Port "17"
+            Interface "17"
+                type: vxlan
+                options: {key="17"}
