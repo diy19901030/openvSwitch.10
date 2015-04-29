@@ -1,12 +1,12 @@
 system@ovs-system:
-	lookups: hit:169282 missed:34722 lost:0
-	flows: 107
+	lookups: hit:476224 missed:30949 lost:0
+	flows: 198
 	port 0: ovs-system (internal)
 	port 1: br0 (internal)
 	port 2: eth0
 	port 3: eth1
-	port 4: br16 (internal)
+	port 4: br5000 (internal)
 	port 5: vxlan_sys_4789 (vxlan: df_default=false, ttl=0)
-	port 6: vnet16
-	port 7: br18 (internal)
-	port 8: br17 (internal)
+	port 6: br16 (internal)
+	port 7: br17 (internal)
+	port 8: br18 (internal)
